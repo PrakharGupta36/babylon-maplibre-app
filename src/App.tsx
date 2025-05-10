@@ -1,11 +1,13 @@
-import { Button } from "@/components/ui/button";
+import Map from "./components/Map";
+import "./App.css";
 
-function App() {
+export default function App() {
   return (
-    <div className='flex flex-col items-center justify-center min-h-svh'>
-      <Button>Click me</Button>
+    <div className='app-container'>
+      <Map
+        mapTilerKey='hhddw2CTw2EzhGN7M86x'
+        initialPosition={[148.9819, -35.3981]}
+      />
     </div>
   );
 }
-
-export default App;
