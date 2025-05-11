@@ -7,6 +7,7 @@ export default function App() {
       <Map
         mapTilerKey='hhddw2CTw2EzhGN7M86x'
         initialPosition={[148.9819, -35.3981]}
+        splatUrl='./test.splat'
       />
     </div>
   );

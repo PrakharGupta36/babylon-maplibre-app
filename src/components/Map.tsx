@@ -6,14 +6,15 @@ import "babylonjs-loaders";
 
 interface Map3DModelProps {
   mapTilerKey?: string;
-
   modelUrl?: string;
+  splatUrl?: string; // Added parameter for splat URL
   initialPosition?: [number, number]; // Optional initial position [lng, lat]
 }
 
 export default function Map({
   mapTilerKey = "hhddw2CTw2EzhGN7M86x",
   modelUrl = "https://maplibre.org/maplibre-gl-js/docs/assets/34M_17/34M_17.gltf",
+  splatUrl = "https://assets.babylonjs.com/splats/gs_Skull.splat", // Default splat URL
   initialPosition = [148.9819, -35.3981],
 }: Map3DModelProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -124,6 +125,11 @@ export default function Map({
             this.loadModel(modelUrl);
           }
 
+          // Load Gaussian Splat
+          if (splatUrl) {
+            this.loadSplatFile(splatUrl);
+          }
+
           this.map = map;
         },
 
@@ -148,6 +154,27 @@ export default function Map({
           } catch (error) {
             console.error("Error loading 3D model:", error);
             setError("Failed to load 3D model");
+          }
+        },
+
+        async loadSplatFile(url: string) {
+          try {
+            // Import the Gaussian Splat
+            BABYLON.ImportMeshAsync(url, this.scene).then((result) => {
+              const gaussianSplattingMesh = result.meshes[0];
+
+              // Position the splat in an appropriate location
+              // Adjust these values according to your needs
+              gaussianSplattingMesh.position = new BABYLON.Vector3(10, 5, 0);
+
+              // Scale the splat (if needed)
+              gaussianSplattingMesh.scaling = new BABYLON.Vector3(3, 3, 3);
+
+              console.log("Gaussian Splat loaded successfully");
+            });
+          } catch (error) {
+            console.error("Error loading Gaussian Splat:", error);
+            setError("Failed to load Gaussian Splat");
           }
         },
 
@@ -200,7 +227,7 @@ export default function Map({
       setError("Failed to initialize map");
       setLoading(false);
     }
-  }, [mapTilerKey, modelUrl, initialPosition]);
+  }, [mapTilerKey, modelUrl, splatUrl, initialPosition]);
 
   return (
     <div
